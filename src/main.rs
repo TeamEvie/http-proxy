@@ -390,7 +390,7 @@ async fn handle_request(
 
     debug!("{} {} ({}): {}", m, p, request_path, status);
 
-    if request_path == "/gateway/bot" && env::var("GATEWAY_PROXY").is_ok() {
+    if request_path.contains("/gateway/bot") && env::var("GATEWAY_PROXY").is_ok() {
         let bytes = match hyper::body::to_bytes(resp.into_body()).await {
             Ok(response) => response,
             Err(e) => {
