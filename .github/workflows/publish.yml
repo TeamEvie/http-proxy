@@ -28,5 +28,3 @@ jobs:
         run: |
           docker tag http-proxy:metricsamd64 ghcr.io/${REPO}:metricsamd64
           docker push ghcr.io/${REPO}:metricsamd64
-          docker manifest create ghcr.io/${REPO}:metrics ghcr.io/${REPO}:metricsamd64 ghcr.io/${REPO}:metricsarmv8
-          docker manifest push ghcr.io/${REPO}:metrics
