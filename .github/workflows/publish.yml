@@ -21,32 +21,12 @@ jobs:
       - name: Convert GITHUB_REPOSITORY into lowercase
         run: |
           echo "REPO=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-      - name: Build for x86_64
-        run: |
-          docker build -t http-proxy:amd64 .
-
       - name: Build for x86_64 with metrics
         run: |
           docker build --no-cache --build-arg FEATURES=expose-metrics -t http-proxy:metricsamd64 .
-      - name: Build for aarch64
-        run: |
-          docker build --no-cache --build-arg RUST_TARGET=aarch64-unknown-linux-musl --build-arg MUSL_TARGET=aarch64-linux-musl --build-arg FINAL_TARGET=aarch64 -t http-proxy:armv8 .
-      - name: Build for aarch64 with metrics
-        run: |
-          docker build --no-cache --build-arg RUST_TARGET=aarch64-unknown-linux-musl --build-arg MUSL_TARGET=aarch64-linux-musl --build-arg FINAL_TARGET=aarch64 --build-arg FEATURES=expose-metrics -t http-proxy:metricsarmv8 .
       - name: Create manifest and push it
         run: |
-          docker tag http-proxy:amd64 ghcr.io/${REPO}:amd64
-          docker tag http-proxy:armv8 ghcr.io/${REPO}:armv8
           docker tag http-proxy:metricsamd64 ghcr.io/${REPO}:metricsamd64
-          docker tag http-proxy:metricsarmv8 ghcr.io/${REPO}:metricsarmv8
-          docker push ghcr.io/${REPO}:amd64
-          docker push ghcr.io/${REPO}:armv8
           docker push ghcr.io/${REPO}:metricsamd64
-          docker push ghcr.io/${REPO}:metricsarmv8
-          docker manifest create ghcr.io/${REPO}:latest ghcr.io/${REPO}:amd64 ghcr.io/${REPO}:armv8
-          docker manifest push ghcr.io/${REPO}:latest
-          docker manifest create ghcr.io/${REPO}:v8 ghcr.io/${REPO}:amd64 ghcr.io/${REPO}:armv8
-          docker manifest push ghcr.io/${REPO}:v8
           docker manifest create ghcr.io/${REPO}:metrics ghcr.io/${REPO}:metricsamd64 ghcr.io/${REPO}:metricsarmv8
           docker manifest push ghcr.io/${REPO}:metrics
