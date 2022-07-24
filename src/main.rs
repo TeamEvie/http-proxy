@@ -291,6 +291,8 @@ async fn handle_request(
 
     let request_path = request.uri().path().to_owned();
 
+    info!("Request path: {}", request_path);
+
     let (api_path, trimmed_path) = normalize_path(&request_path);
 
     let path = match Path::try_from((method, trimmed_path)) {
@@ -387,6 +389,26 @@ async fn handle_request(
     }
 
     debug!("{} {} ({}): {}", m, p, request_path, status);
+
+    if request_path == "/gateway/bot" && env::var("GATEWAY_PROXY").is_ok() {
+        let bytes = match hyper::body::to_bytes(resp.into_body()).await {
+            Ok(response) => response,
+            Err(e) => {
+                error!("Error when replacing gateway: {:?}", e);
+                return Err(RequestError::RequestIssue { source: e });
+            }
+        };
+        let result = String::from_utf8(bytes.into_iter().collect()).expect("");
+        let result = result.replace(
+            "wss://gateway.discord.gg",
+            &env::var("GATEWAY_PROXY").unwrap(),
+        );
+
+        return Ok(Response::builder()
+            .status(200)
+            .body(Body::from(result))
+            .unwrap());
+    }
 
     Ok(resp)
 }
