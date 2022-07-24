@@ -1,7 +1,7 @@
 # teamevie-http-proxy
 
 This is our fork of `http-proxy` a ratelimited HTTP proxy in front of the Discord API, making use
-of [twilight]. The only difference is that we don't allow the use of multiple applications and only use the default token set.
+of [twilight]. The only difference is that we don't allow the use of multiple applications and only use the default token set to support Discord libraries that forcefully send an authorization header making the proxy think it's another bot with a token of `""`.
 
 ## Use
 
