@@ -1,7 +1,7 @@
-# twilight-http-proxy
+# teamevie-http-proxy
 
-`http-proxy` is a ratelimited HTTP proxy in front of the Discord API, making use
-of [twilight].
+This is our fork of `http-proxy` a ratelimited HTTP proxy in front of the Discord API, making use
+of [twilight]. The only difference is that we don't allow the use of multiple applications and only use the default token set.
 
 ## Use
 
@@ -51,27 +51,6 @@ ratelimiting itself), and will request over HTTP.
 If you are using a different Discord API client, make sure that you are not
 ratelimiting outgoing requests, because the proxy will do this instead. Very
 short HTTP client timeouts may also cause issues with longer ratelimits.
-
-### Multiple applications
-
-By default, the proxy will use the token provided in the `DISCORD_TOKEN`
-enviroment variable for all requests. You can bypass this by providing a
-different token in the `Authorization` header yourself.
-
-The proxy will keep track of ratelimits on a per-token basis, so using multiple
-applications is as easy as sending the header alongside your requests.
-
-You can configure how long the proxy stores ratelimit information with these
-enviroment variables:
-
-- `CLIENT_DECAY_TIMEOUT` (in seconds; defaults to 1 hour) sets the timeout
-  after which ratelimiting information will be dropped due to not being used
-  anymore
-- `CLIENT_CACHE_MAX_SIZE` (defaults to no limit) limits the amount of
-  ratelimiting information in the cache - if full, the least recently used
-  ratelimiting information will be removed
-- `CLIENT_REAP_INTERVAL` (in seconds; defaults to 10 minutes) changes the
-  interval at which ratelimiting information will be checked for decay
 
 ### Running via Docker
 
@@ -132,5 +111,3 @@ status codes include:
 - `502` if the request made by the proxy fails
 
 [twilight]: https://github.com/twilight-rs/twilight
-[docker hub]: https://hub.docker.com/r/twilightrs/http-proxy
-[docker-hub-tags]: https://hub.docker.com/r/twilightrs/http-proxy/tags
