@@ -35,7 +35,6 @@ jobs:
         run: |
           docker build --no-cache --build-arg RUST_TARGET=aarch64-unknown-linux-musl --build-arg MUSL_TARGET=aarch64-linux-musl --build-arg FINAL_TARGET=aarch64 --build-arg FEATURES=expose-metrics -t http-proxy:metricsarmv8 .
       - name: Create manifest and push it
-        if: env.DOCKER_USERNAME
         run: |
           docker tag http-proxy:amd64 ghcr.io/${REPO}:amd64
           docker tag http-proxy:armv8 ghcr.io/${REPO}:armv8
