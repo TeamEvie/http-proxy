@@ -17,7 +17,7 @@ twilight-http-ratelimiting = "0.9"
 
 # Only used by the `expose-metrics` feature.
 metrics = { version = "0.18", optional = true }
-metrics-exporter-prometheus = { version = "0.8", default-features = false, optional = true }
+metrics-exporter-prometheus = { version = "0.10", default-features = false, optional = true }
 lazy_static = { version = "1.4", optional = true }
 
 [features]
