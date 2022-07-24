@@ -104,11 +104,8 @@ async fn main() -> Result<(), Box<dyn Error>> {
 
         async move {
             Ok::<_, Infallible>(service::service_fn(move |incoming: Request<Body>| {
-                let token = incoming
-                    .headers()
-                    .get("authorization")
-                    .and_then(|value| value.to_str().ok());
-                let (ratelimiter, token) = ratelimiter_map.get_or_insert(token);
+                let (ratelimiter, token) = ratelimiter_map.get_or_insert(None);
+
                 let client = client.clone();
 
                 #[cfg(feature = "expose-metrics")]
