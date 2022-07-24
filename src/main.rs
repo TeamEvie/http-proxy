@@ -3,7 +3,9 @@ mod ratelimiter_map;
 
 use error::RequestError;
 use http::{
-    header::{AUTHORIZATION, CONNECTION, HOST, TRANSFER_ENCODING, UPGRADE},
+    header::{
+        AUTHORIZATION, CONNECTION, CONTENT_TYPE, HOST, TRANSFER_ENCODING, UPGRADE, USER_AGENT,
+    },
     HeaderValue, Method as HttpMethod, Uri,
 };
 use hyper::{
@@ -332,6 +334,7 @@ async fn handle_request(
     request.headers_mut().remove("proxy-connection");
     request.headers_mut().remove(TRANSFER_ENCODING);
     request.headers_mut().remove(UPGRADE);
+    request.headers_mut().remove(USER_AGENT);
 
     let mut uri_string = format!("https://discord.com{}{}", api_path, trimmed_path);
 
@@ -398,14 +401,18 @@ async fn handle_request(
                 return Err(RequestError::RequestIssue { source: e });
             }
         };
-        let result = String::from_utf8(bytes.into_iter().collect()).expect("");
+        let result =
+            String::from_utf8(bytes.to_vec()).expect("Response is guaranteed to be valid UTF-8");
         let result = result.replace(
             "wss://gateway.discord.gg",
             &env::var("GATEWAY_PROXY").unwrap(),
         );
 
+        info!("result: {}", result);
+
         return Ok(Response::builder()
-            .status(200)
+            .status(status)
+            .header(CONTENT_TYPE, "application/json")
             .body(Body::from(result))
             .unwrap());
     }
