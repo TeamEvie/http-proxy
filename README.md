@@ -57,9 +57,7 @@ short HTTP client timeouts may also cause issues with longer ratelimits.
 Prebuilt Docker images are published on [Docker Hub].
 
 ```sh
-$ docker run -itd -e DISCORD_TOKEN="my token" -p 3000:80 twilightrs/http-proxy
-# Or with metrics enabled
-$ docker run -itd -e DISCORD_TOKEN="my token" -p 3000:80 twilightrs/http-proxy:metrics
+$ docker run -itd -e DISCORD_TOKEN="my token" -p 3000:80 ghcr.io/teamevie/http-proxy:metrics
 ```
 
 This will set the discord token to `"my token"` and map the bound port to port
