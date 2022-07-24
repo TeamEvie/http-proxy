@@ -33,5 +33,5 @@ jobs:
           tags: ghcr.io/${REPO}:metricsamd64
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          build-args:
-            - FEATURES=expose-metrics
+          build-args: |
+            FEATURES:expose-metrics
