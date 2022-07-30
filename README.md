@@ -1,3 +1,6 @@
+⚠️ Archive Notice: We use Proxi now, our very own rest proxy implementation.
+
+
 # teamevie-http-proxy
 
 This is our fork of `http-proxy` a ratelimited HTTP proxy in front of the Discord API, making use
